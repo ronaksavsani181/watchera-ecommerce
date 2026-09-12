@@ -1,0 +1,293 @@
+<section class="relative min-h-[96vh] w-full overflow-hidden pt-20" aria-label="Hero Carousel">
+  @for (slide of slides; track slide.title; let index = $index) {
+    <div
+      class="absolute inset-0 transition-opacity duration-1000 ease-in-out"
+      [class.opacity-100]="activeSlide() === index"
+      [class.opacity-0]="activeSlide() !== index"
+      [class.pointer-events-none]="activeSlide() !== index"
+      [attr.aria-hidden]="activeSlide() !== index"
+    >
+      <img
+        [src]="slide.image"
+        [alt]="slide.title"
+        class="h-full w-full object-cover"
+        [style.object-position]="slide.position || 'center'"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-black/95 via-black/60 to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(212,175,55,0.15),transparent_50%)]"></div>
+    </div>
+  }
+
+  <div class="luxury-container relative z-10 flex min-h-[88vh] flex-col justify-center py-16">
+    <div class="max-w-3xl transform transition-all duration-700 translate-y-0 opacity-100">
+      <p class="mb-4 text-sm font-semibold uppercase tracking-[0.3em] text-luxury-gold drop-shadow-md">
+        Watchera India
+      </p>
+      <h1 class="font-serif text-2xl leading-tight text-white md:text-3xl lg:text-5xl drop-shadow-lg">
+        {{ slides[activeSlide()].title }}
+      </h1>
+      <p class="mt-6 max-w-xl text-md font-light leading-relaxed text-slate-300 md:text-md">
+        {{ slides[activeSlide()].subtitle }}
+      </p>
+      <div class="mt-12 flex flex-wrap items-center gap-6">
+        <a [routerLink]="slides[activeSlide()].link" class="group relative inline-flex items-center justify-center overflow-hidden rounded-sm bg-luxury-gold px-10 py-4 text-sm font-medium uppercase tracking-[0.15em] text-black transition-all hover:bg-white focus:outline-none focus:ring-2 focus:ring-luxury-gold focus:ring-offset-2 focus:ring-offset-black">
+          <span class="relative z-10">{{ slides[activeSlide()].cta }}</span>
+        </a>
+        <a routerLink="/concierge" class="group relative inline-flex items-center justify-center px-6 py-4 text-sm font-medium uppercase tracking-[0.15em] text-white transition-all hover:text-luxury-gold focus:outline-none">
+          <span class="relative z-10">Book Concierge</span>
+          <span class="absolute bottom-2 left-6 right-6 h-[1px] bg-white/30 transition-all group-hover:bg-luxury-gold"></span>
+        </a>
+      </div>
+    </div>
+
+    <div class="absolute bottom-12 left-0 right-0 z-20 w-full">
+      <div class="luxury-container flex items-center gap-6">
+        <button
+          type="button"
+          (click)="previousSlide()"
+          class="group flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-black/20 backdrop-blur-md transition-all hover:border-luxury-gold hover:bg-luxury-gold/10 focus:outline-none"
+          aria-label="Previous slide"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white transition-colors group-hover:text-luxury-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <div class="flex items-center gap-3">
+          @for (slide of slides; track slide.title; let index = $index) {
+            <button
+              type="button"
+              (click)="goToSlide(index)"
+              class="h-1 w-10 rounded-full transition-all duration-500 focus:outline-none"
+              [class.bg-luxury-gold]="activeSlide() === index"
+              [class.bg-white/20]="activeSlide() !== index"
+              [attr.aria-label]="'Go to slide ' + (index + 1)"
+              [attr.aria-current]="activeSlide() === index ? 'true' : null"
+            ></button>
+          }
+        </div>
+        <button
+          type="button"
+          (click)="nextSlide()"
+          class="group flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-black/20 backdrop-blur-md transition-all hover:border-luxury-gold hover:bg-luxury-gold/10 focus:outline-none"
+          aria-label="Next slide"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white transition-colors group-hover:text-luxury-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="border-y border-white/10 bg-[#0a0a0a] py-12" aria-label="Company Statistics">
+  <div class="luxury-container grid grid-cols-1 gap-6 text-center sm:grid-cols-3 ">
+    <div class="group rounded-2xl border  border-white/40  bg-white/[0.02] px-6 py-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-luxury-gold/30 hover:bg-white/[0.04]">
+      <p class="text-xs font-medium uppercase tracking-[0.2em] text-slate-400 group-hover:text-luxury-gold transition-colors">Established</p>
+      <p class="mt-3 font-serif text-4xl text-white">2016</p>
+    </div>
+    <div class="group rounded-2xl  border  border-white/40  bg-white/[0.02] px-6 py-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-luxury-gold/30 hover:bg-white/[0.04]">
+      <p class="text-xs font-medium uppercase tracking-[0.2em] text-slate-400 group-hover:text-luxury-gold transition-colors">Models Curated</p>
+      <p class="mt-3 font-serif text-4xl text-white">250+</p>
+    </div>
+    <div class="group rounded-2xl  border  border-white/40  bg-white/[0.02] px-6 py-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-luxury-gold/30 hover:bg-white/[0.04]">
+      <p class="text-xs font-medium uppercase tracking-[0.2em] text-slate-400 group-hover:text-luxury-gold transition-colors">Cities Delivered</p>
+      <p class="mt-3 font-serif text-4xl text-white">120+</p>
+    </div>
+  </div>
+</section>
+
+<section class="bg-[#050505] py-20 border-b border-white/5 overflow-hidden">
+  <div class="text-center mb-10">
+    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-luxury-gold">Curated Collections</p>
+    <h2 class="mt-3 font-serif text-3xl text-white md:text-4xl">The World's Finest Brands</h2>
+  </div>
+  
+  <div class="relative w-full flex overflow-hidden group">
+    <div class="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-[#050505] to-transparent z-10 pointer-events-none"></div>
+    <div class="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-[#050505] to-transparent z-10 pointer-events-none"></div>
+
+    <div class="marquee-track flex gap-10 md:gap-16 items-center pt-5 px-10 w-max">
+      
+      @for (brand of brands; track $index) {
+        <a [routerLink]="['/collections']" [queryParams]="{ brand: brand.name }" class="brand-item group/brand flex flex-col items-center gap-4 focus:outline-none">
+          <div class="h-24 w-24 md:h-32 md:w-32 rounded-full overflow-hidden border-2 border-white/50 bg-[#111] transition-all duration-500 group-hover/brand:border-luxury-gold group-hover/brand:shadow-[0_0_25px_rgba(212,175,55,0.25)] group-hover/brand:-translate-y-2">
+            <img [src]="brand.image" [alt]="brand.name" class="h-full w-full object-cover transition-all duration-700 grayscale group-hover/brand:grayscale-0 group-hover/brand:scale-110" />
+          </div>
+          <span class="text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] text-gray-500 transition-colors group-hover/brand:text-luxury-gold">{{ brand.name }}</span>
+        </a>
+      }
+      
+      @for (brand of brands; track 'dup-' + $index) {
+        <a [routerLink]="['/collections']" [queryParams]="{ brand: brand.name }" class="brand-item group/brand flex flex-col items-center gap-4 focus:outline-none">
+          <div class="h-24 w-24 md:h-32 md:w-32 rounded-full overflow-hidden border-2 border-white/10 bg-[#111] transition-all duration-500 group-hover/brand:border-luxury-gold group-hover/brand:shadow-[0_0_25px_rgba(212,175,55,0.25)] group-hover/brand:-translate-y-2">
+            <img [src]="brand.image" [alt]="brand.name" class="h-full w-full object-cover transition-all duration-700 grayscale group-hover/brand:grayscale-0 group-hover/brand:scale-110" />
+          </div>
+          <span class="text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] text-gray-500 transition-colors group-hover/brand:text-luxury-gold">{{ brand.name }}</span>
+        </a>
+      }
+
+    </div>
+  </div>
+</section>
+
+<section class="luxury-container py-24" aria-labelledby="categories-heading">
+  <div class="mb-14 flex flex-wrap items-end justify-between gap-6">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[0.25em] text-luxury-gold">Shop By Category</p>
+      <h2 id="categories-heading" class="mt-3 font-serif text-4xl text-white md:text-5xl lg:text-6xl">Built for Every Wrist</h2>
+    </div>
+    <a routerLink="/collections" class="inline-flex items-center gap-2 text-sm uppercase tracking-[0.15em] text-white transition-colors hover:text-luxury-gold group">
+      View All Watches
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+      </svg>
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+    @for (category of categories; track category.title) {
+      <a [routerLink]="category.link" class="group relative block overflow-hidden rounded-2xl focus:outline-none">
+        <div class="relative aspect-[4/5] w-full overflow-hidden bg-[#111]">
+          <img
+            [src]="category.image"
+            [alt]="category.title"
+            class="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent transition-opacity duration-500 group-hover:opacity-90"></div>
+          
+          <div class="absolute inset-4 rounded-xl border border-white/0 transition-colors duration-500 group-hover:border-luxury-gold/30"></div>
+
+          <div class="absolute bottom-0 left-0 right-0 p-8 transform transition-transform duration-500 group-hover:-translate-y-2">
+            <h3 class="font-serif text-3xl text-white md:text-4xl">{{ category.title }}</h3>
+            <p class="mt-3 text-sm font-light text-slate-300 opacity-0 transition-opacity duration-500 group-hover:opacity-100">{{ category.description }}</p>
+          </div>
+        </div>
+      </a>
+    }
+  </div>
+</section>
+
+<section class="border-y border-white/5 bg-[#0a0a0a] py-24" aria-labelledby="new-arrivals-heading">
+  <div class="luxury-container">
+    <div class="mb-14 flex flex-wrap items-end justify-between gap-5">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.25em] text-luxury-gold">Latest Drops</p>
+        <h2 id="new-arrivals-heading" class="mt-3 font-serif text-4xl text-white md:text-5xl">New Arrivals</h2>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+      @for (product of newArrivals(); track product.id) {
+        <a [routerLink]="['/product', product.id]" class="group block focus:outline-none p-2 border border-white/30 rounded-2xl">
+          <div class="relative mb-5 border-1 border-white/40 aspect-[3/4] overflow-hidden rounded-xl bg-white/[0.02]">
+            <img [src]="product.image" [alt]="product.name" class="h-full w-full object-cover object-center transition-transform duration-700 ease-in-out group-hover:scale-105" />
+            <span class="absolute left-4 top-4 rounded-full bg-black/80 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.25em] text-white backdrop-blur-md">
+              New
+            </span>
+            <div class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
+              <span class="rounded-sm border border-luxury-gold bg-black/80 px-6 py-3 text-xs uppercase tracking-[0.2em] text-luxury-gold">Discover</span>
+            </div>
+          </div>
+          <div class="text-center">
+            <p class="mb-1 text-[10px] font-semibold uppercase tracking-[0.25em] text-slate-500">{{ product.collection }}</p>
+            <h3 class="font-serif text-xl text-white transition-colors group-hover:text-luxury-gold">{{ product.name }}</h3>
+            <p class="mt-2 text-sm text-slate-300">{{ product.price | currency:'INR':'symbol':'1.0-0' }}</p>
+          </div>
+        </a>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="luxury-container py-24" aria-labelledby="guides-heading">
+  <div class="mb-14 flex flex-wrap items-end justify-between gap-6">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[0.25em] text-luxury-gold">Buying Guides</p>
+      <h2 id="guides-heading" class="mt-3 font-serif text-4xl text-white md:text-5xl">Learn Before You Buy</h2>
+    </div>
+    <a routerLink="/journal" class="inline-flex items-center gap-2 text-sm uppercase tracking-[0.15em] text-white transition-colors hover:text-luxury-gold group">
+      Open Journal
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+      </svg>
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+    @for (story of editorialStories; track story.title) {
+      <article class="group relative overflow-hidden rounded-2xl border border-white/40 bg-white/[0.02]">
+        <div class="aspect-[16/9] overflow-hidden bg-[#111]">
+          <img [src]="story.image" [alt]="story.title" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+        </div>
+        <div class="p-8">
+          <h3 class="font-serif text-3xl text-white transition-colors group-hover:text-luxury-gold">{{ story.title }}</h3>
+          <p class="mt-4 text-sm font-light leading-relaxed text-slate-400">{{ story.excerpt }}</p>
+          <a routerLink="/journal" class="mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-luxury-gold transition-colors hover:text-white">
+            Read Full Story
+            <span class="h-[1px] w-8 bg-luxury-gold transition-all group-hover:w-12 group-hover:bg-white"></span>
+          </a>
+        </div>
+      </article>
+    }
+  </div>
+</section>
+
+<section class="border-t border-white/5 bg-[#050505] py-24" aria-labelledby="best-sellers-heading">
+  <div class="luxury-container">
+    <div class="mb-14 flex flex-wrap items-end justify-between gap-5">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.25em] text-luxury-gold">Most Loved</p>
+        <h2 id="best-sellers-heading" class="mt-3 font-serif text-4xl text-white md:text-5xl">Best Sellers</h2>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+      @for (product of bestSellers(); track product.id) {
+        <a [routerLink]="['/product', product.id]" class="group block focus:outline-none p-2 border rounded-2xl border-white/30">
+          <div class="relative mb-5 aspect-[3/4] overflow-hidden rounded-xl bg-white/[0.02]">
+            <img [src]="product.image" [alt]="product.name" class="h-full w-full object-cover object-center transition-transform duration-700 ease-in-out group-hover:scale-105" />
+            <div class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
+              <span class="rounded-sm border border-luxury-gold bg-black/80 px-6 py-3 text-xs uppercase tracking-[0.2em] text-luxury-gold">Discover</span>
+            </div>
+          </div>
+          <div class="text-center">
+            <p class="mb-1 text-[10px] font-semibold uppercase tracking-[0.25em] text-slate-500">{{ product.collection }}</p>
+            <h3 class="font-serif text-xl text-white transition-colors group-hover:text-luxury-gold">{{ product.name }}</h3>
+            <p class="mt-2 text-sm text-slate-300">{{ product.price | currency:'INR':'symbol':'1.0-0' }}</p>
+          </div>
+        </a>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="pb-24 pt-12 bg-[#050505]">
+  <div class="luxury-container relative overflow-hidden rounded-[2.5rem] border border-white/30 bg-[#0a0e15] p-0 shadow-2xl">
+    <div class="absolute -right-40 -top-40 h-[500px] w-[500px] rounded-full bg-luxury-gold/10 blur-[100px]"></div>
+    
+    <div class="grid lg:grid-cols-2">
+      <div class="relative z-10 flex flex-col justify-center p-10 md:p-16 lg:p-20">
+        <p class="text-xs font-semibold uppercase tracking-[0.25em] text-luxury-gold">Concierge</p>
+        <h2 class="mt-4 font-serif text-4xl leading-tight text-white md:text-5xl lg:text-6xl">Personal Assistance for Every Order</h2>
+        <p class="mt-6 text-base font-light leading-relaxed text-slate-300">
+          Need help choosing your watch, gifting, strap changes, or servicing? Watchera concierge
+          supports you before and after every purchase with dedicated white-glove service.
+        </p>
+        <div class="mt-10 flex flex-wrap gap-5">
+          <a routerLink="/concierge" class="inline-flex items-center justify-center rounded-sm bg-luxury-gold px-8 py-4 text-xs font-semibold uppercase tracking-[0.15em] text-black transition-all hover:bg-white focus:outline-none">Contact Concierge</a>
+          <a routerLink="/collections" class="inline-flex items-center justify-center rounded-sm border border-white/20 px-8 py-4 text-xs font-semibold uppercase tracking-[0.15em] text-white transition-all hover:border-luxury-gold hover:text-luxury-gold focus:outline-none">Continue Shopping</a>
+        </div>
+      </div>
+      <div class="relative h-96 lg:h-auto bg-[#111]">
+        <img
+          src="https://i.pinimg.com/1200x/fe/51/8a/fe518a0a33b8c154a3e70477f504d634.jpg?q=80&w=1600&auto=format&fit=crop"
+          alt="Watchera concierge representative assisting a client"
+          class="absolute inset-0 h-full w-full object-cover"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0a0e15] to-transparent lg:bg-gradient-to-r"></div>
+      </div>
+    </div>
+  </div>
+</section>

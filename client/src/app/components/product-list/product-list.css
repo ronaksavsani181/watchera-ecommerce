@@ -1,0 +1,76 @@
+:host {
+  display: block;
+}
+
+/* Hide default details marker (arrow) across all browsers */
+.custom-summary::-webkit-details-marker {
+  display: none;
+}
+.custom-summary {
+  list-style-type: none;
+}
+
+/* Elevated Luxury Checkbox */
+.luxury-checkbox {
+  appearance: none;
+  width: 1.125rem; /* 18px */
+  height: 1.125rem; /* 18px */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  background-color: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+}
+
+.luxury-checkbox:checked {
+  background-color: #D4AF37;
+  border-color: #D4AF37;
+}
+
+.luxury-checkbox:checked::after {
+  content: '';
+  width: 5px;
+  height: 9px;
+  border: solid black;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+
+.luxury-checkbox:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px #0a0a0a, 0 0 0 2px #D4AF37;
+}
+
+/* Custom Scrollbar for filter lists */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 175, 55, 0.5); /* Luxury Gold */
+}
+
+/* Smooth enter animation for mobile menu */
+.animate-slide-in-right {
+  animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}

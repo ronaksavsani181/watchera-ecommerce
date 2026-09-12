@@ -1,0 +1,15 @@
+<div class="app-shell min-h-screen flex flex-col text-slate-100 selection:bg-luxury-gold/70 selection:text-black">
+  @if (showLayout()) {
+    <app-navbar />
+  }
+
+  <main class="grow relative">
+    <router-outlet />
+  </main>
+
+  @if (showLayout()) {
+    <app-footer />
+    <app-cart-drawer />
+    <app-auth-popup />
+  }
+</div>

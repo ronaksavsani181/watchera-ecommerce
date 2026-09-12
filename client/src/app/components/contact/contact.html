@@ -1,0 +1,156 @@
+<section class="relative pt-32 pb-16 bg-[#050505] overflow-hidden">
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-64 bg-[#D4AF37]/5 blur-[100px] rounded-full pointer-events-none"></div>
+  
+  <div class="luxury-container relative z-10 text-center">
+    <div class="mb-5 flex items-center justify-center gap-3">
+      <span class="h-[1px] w-8 bg-[#D4AF37]"></span>
+      <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-[#D4AF37]">Watchera Concierge</p>
+      <span class="h-[1px] w-8 bg-[#D4AF37]"></span>
+    </div>
+    <h1 class="mx-auto max-w-4xl font-serif text-4xl text-white md:text-5xl lg:text-6xl leading-tight">
+      Personalized assistance before and after every purchase.
+    </h1>
+  </div>
+</section>
+
+<section class="bg-[#050505] pb-24">
+  <div class="luxury-container max-w-6xl">
+    
+    <div class="grid gap-10 lg:grid-cols-[1fr,1.3fr] xl:gap-16 items-start">
+      
+      <div class="rounded-2xl border border-white/5 bg-[#0a0a0a] p-8 md:p-12 shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-[#D4AF37]/5 blur-[50px] rounded-full pointer-events-none"></div>
+        
+        <h2 class="font-serif text-3xl text-white border-b border-white/5 pb-6">Visit or Call</h2>
+        
+        <div class="mt-8 space-y-10">
+          
+          <div class="flex gap-5 items-start">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.02]">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-[#D4AF37]">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">Mumbai Flagship</p>
+              <p class="mt-1.5 text-base text-white">BKC, Mumbai 400051</p>
+              <a href="tel:+912255550123" class="mt-1 inline-block text-sm text-[#D4AF37] hover:text-white transition-colors">+91 22 5555 0123</a>
+            </div>
+          </div>
+
+          <div class="flex gap-5 items-start">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.02]">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-[#D4AF37]">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">New Delhi Boutique</p>
+              <p class="mt-1.5 text-base text-white">Vasant Kunj, New Delhi 110070</p>
+              <a href="tel:+911155550199" class="mt-1 inline-block text-sm text-[#D4AF37] hover:text-white transition-colors">+91 11 5555 0199</a>
+            </div>
+          </div>
+
+          <div class="flex gap-5 items-start">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.02]">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-[#D4AF37]">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">Support Hours</p>
+              <p class="mt-1.5 text-sm text-gray-300 leading-relaxed">Monday to Saturday<br>10:00 AM - 7:00 PM (IST)</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="rounded-2xl border border-white/5 bg-[#0a0a0a] p-8 md:p-12 shadow-2xl">
+        <h2 class="font-serif text-3xl text-white border-b border-white/5 pb-6">Send a Request</h2>
+        
+        @if (isSent()) {
+          <div class="mt-8 flex items-start gap-3 rounded-lg border border-green-500/20 bg-green-500/10 p-4 animate-fade-in">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5 text-green-400 shrink-0 mt-0.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p class="text-sm text-green-400 leading-relaxed">
+              Thank you. Your request has been received. A Watchera Concierge will contact you shortly.
+            </p>
+          </div>
+        }
+
+        <form [formGroup]="form" (ngSubmit)="submit()" class="mt-8 space-y-6">
+          
+          <div class="grid gap-6 md:grid-cols-2">
+            <div>
+              <label class="mb-2.5 block text-[10px] font-semibold uppercase tracking-[0.2em] text-gray-500">Full Name</label>
+              <input
+                formControlName="name"
+                class="w-full rounded-md border border-white/10 bg-white/[0.02] px-4 py-3.5 text-white placeholder-gray-600 outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-all"
+                placeholder="Your full name"
+              />
+            </div>
+            <div>
+              <label class="mb-2.5 block text-[10px] font-semibold uppercase tracking-[0.2em] text-gray-500">Email Address</label>
+              <input
+                formControlName="email"
+                type="email"
+                class="w-full rounded-md border border-white/10 bg-white/[0.02] px-4 py-3.5 text-white placeholder-gray-600 outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-all"
+                placeholder="name@email.com"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="mb-2.5 block text-[10px] font-semibold uppercase tracking-[0.2em] text-gray-500">Subject / Inquiry Type</label>
+            <div class="relative">
+              <select
+                formControlName="subject"
+                class="w-full appearance-none rounded-md border border-white/10 bg-white/[0.02] px-4 py-3.5 text-white outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-all"
+              >
+                <option value="" disabled class="bg-[#0a0a0a] text-gray-500">Select inquiry type</option>
+                <option value="consultation" class="bg-[#0a0a0a] text-white">Buying Consultation</option>
+                <option value="repair" class="bg-[#0a0a0a] text-white">Service / Repair</option>
+                <option value="appointment" class="bg-[#0a0a0a] text-white">Store Appointment</option>
+                <option value="other" class="bg-[#0a0a0a] text-white">Other Inquiry</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="mb-2.5 block text-[10px] font-semibold uppercase tracking-[0.2em] text-gray-500">Message</label>
+            <textarea
+              formControlName="message"
+              rows="5"
+              class="w-full resize-none rounded-md border border-white/10 bg-white/[0.02] px-4 py-3.5 text-white placeholder-gray-600 outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-all"
+              placeholder="Tell us how we can assist you today..."
+            ></textarea>
+          </div>
+
+          <div class="pt-4">
+            <button 
+              type="submit" 
+              [disabled]="isSubmitting() || form.invalid" 
+              class="flex w-full items-center justify-center gap-3 rounded-sm bg-[#D4AF37] hover:bg-white px-8 py-4.5 text-xs font-bold uppercase tracking-[0.15em] text-black transition-all disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none"
+            >
+              @if (!isSubmitting()) {
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                </svg>
+              }
+              {{ isSubmitting() ? 'Transmitting Request...' : 'Send Request to Concierge' }}
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>

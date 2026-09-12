@@ -1,0 +1,99 @@
+<div class="bg-[#050505] min-h-screen font-sans selection:bg-[#D4AF37] selection:text-black pb-24 pt-24">
+
+  <section class="grid grid-cols-1 lg:grid-cols-2 min-h-[60vh] lg:min-h-[75vh] border-y border-white/10 bg-[#0a0a0a]">
+    
+    <div class="relative w-full h-[50vh] lg:h-full overflow-hidden group bg-[#111]">
+      <div class="absolute inset-0 bg-black/20 z-10 transition-colors duration-700 group-hover:bg-transparent"></div>
+      <img
+        [src]="content().heroImage"
+        [alt]="content().heroAlt"
+        class="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover:scale-105"
+      />
+    </div>
+
+    <div class="flex flex-col justify-center px-8 py-16 md:px-16 lg:px-20 xl:px-28 relative bg-gradient-to-b from-[#111] to-[#0a0a0a] lg:bg-none">
+      <div class="animate-fade-in max-w-2xl">
+        <div class="flex items-center gap-4 mb-8">
+          <div class="h-[1px] w-12 bg-[#D4AF37]"></div>
+          <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
+            {{ content().eyebrow }}
+          </p>
+        </div>
+        <h1 class="font-serif text-5xl text-white md:text-6xl lg:text-7xl leading-[1.1] tracking-wide mb-8">
+          {{ content().title }}
+        </h1>
+        <p class="text-gray-400 font-light text-lg md:text-xl leading-relaxed">
+          {{ content().intro }}
+        </p>
+      </div>
+    </div>
+    
+  </section>
+
+  <section class="border-b border-white/5 bg-[#050505]">
+    <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/5">
+      @for (highlight of content().highlights; track highlight.title) {
+        <article class="px-8 py-12 md:px-12 lg:px-20 group text-center md:text-left transition-colors hover:bg-white/[0.02]">
+          <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-gray-500 mb-3 transition-colors group-hover:text-[#D4AF37]">
+            {{ highlight.title }}
+          </p>
+          <p class="font-serif text-3xl md:text-4xl text-white">
+            {{ highlight.value }}
+          </p>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="py-24 px-6 md:px-12 max-w-[100rem] mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-x-24 lg:gap-y-20">
+      @for (section of content().sections; track section.title; let i = $index) {
+        <article class="relative group">
+          <div class="flex items-center justify-between border-t border-white/10 pt-6 mb-6">
+            <span class="text-[10px] font-bold text-[#D4AF37]">0{{ i + 1 }}</span>
+          </div>
+          
+          <h2 class="font-serif text-3xl md:text-4xl text-white mb-5">{{ section.title }}</h2>
+          <p class="text-gray-400 font-light leading-relaxed text-base md:text-lg">
+            {{ section.description }}
+          </p>
+          
+          @if (section.bullets && section.bullets.length > 0) {
+            <ul class="mt-8 space-y-4">
+              @for (bullet of section.bullets; track bullet) {
+                <li class="flex items-start gap-4 text-gray-300 font-light text-base">
+                  <span class="mt-2.5 shrink-0 block h-1 w-1 rounded-full bg-[#D4AF37]"></span>
+                  <span>{{ bullet }}</span>
+                </li>
+              }
+            </ul>
+          }
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="px-6 md:px-12 max-w-[100rem] mx-auto mt-8">
+    <div class="relative overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a0a] p-12 md:p-20 flex flex-col lg:flex-row items-center justify-between gap-10">
+      <div class="absolute -left-40 top-1/2 -translate-y-1/2 w-96 h-96 bg-[#D4AF37]/10 blur-[100px] rounded-full pointer-events-none"></div>
+      
+      <div class="relative z-10 max-w-2xl text-center lg:text-left">
+        <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-[#D4AF37] mb-4">Dedicated Support</p>
+        <h3 class="font-serif text-4xl md:text-5xl text-white mb-4">Need personal assistance?</h3>
+        <p class="text-gray-400 font-light leading-relaxed text-lg">
+          Our concierge team is available to assist with product advice, service requests, delivery updates, and policy clarifications.
+        </p>
+      </div>
+      
+      <div class="relative z-10 flex flex-col sm:flex-row items-center gap-4 shrink-0 w-full lg:w-auto">
+        <a routerLink="/concierge" class="w-full sm:w-auto inline-flex items-center justify-center rounded bg-[#D4AF37] px-10 py-4 text-[11px] font-bold uppercase tracking-[0.15em] text-black transition-all hover:bg-white focus:outline-none shadow-[0_0_20px_rgba(212,175,55,0.3)]">
+          Contact Concierge
+        </a>
+        <a routerLink="/collections" class="w-full sm:w-auto inline-flex items-center justify-center rounded border border-white/20 bg-transparent px-10 py-4 text-[11px] font-bold uppercase tracking-[0.15em] text-white transition-all hover:border-[#D4AF37] hover:text-[#D4AF37] focus:outline-none">
+          Return to Boutique
+        </a>
+      </div>
+    </div>
+  </section>
+
+</div>

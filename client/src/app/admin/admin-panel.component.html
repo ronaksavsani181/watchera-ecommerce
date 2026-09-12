@@ -1,0 +1,1361 @@
+<div class="admin-shell">
+
+  @if (alertVisible()) {
+    <div class="alert-overlay" (click)="closeAlert()">
+      <div class="alert-box" (click)="$event.stopPropagation()">
+        <div class="alert-icon" [ngClass]="alertType()">
+          @if (alertType() === 'success') {
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          }
+          @if (alertType() === 'error') {
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          }
+          @if (alertType() === 'warning') {
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          }
+          @if (alertType() === 'confirm') {
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          }
+        </div>
+        <div class="alert-content">
+          <p class="alert-title">{{ alertTitle() }}</p>
+          <p class="alert-message">{{ alertMessage() }}</p>
+        </div>
+        <div class="alert-actions">
+          @if (alertType() === 'confirm') {
+            <button class="alert-btn-cancel" (click)="closeAlert()">Cancel</button>
+            <button class="alert-btn-confirm" (click)="confirmAction()">Confirm</button>
+          } @else {
+            <button class="alert-btn-ok" (click)="closeAlert()">OK</button>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <aside class="sidebar" [class.sidebar-collapsed]="sidebarCollapsed()">
+    <div class="sidebar-brand">
+      @if (!sidebarCollapsed()) {
+         <a routerLink="/" class="relative z-50 flex flex-col leading-none group focus:outline-none">
+      <span class="font-serif text-3xl tracking-tight text-white transition-colors group-hover:text-gray-200">
+        WATCHERA<span class="text-luxury-gold">.</span>
+      </span>
+      <span class="text-[9px] font-bold uppercase tracking-[0.3em] text-slate-500 mt-1">India</span>
+    </a>
+      }
+    </div>
+
+    <button class="sidebar-toggle" (click)="sidebarCollapsed.set(!sidebarCollapsed())">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        @if (sidebarCollapsed()) {
+          <polyline points="9 18 15 12 9 6"/>
+        } @else {
+          <polyline points="15 18 9 12 15 6"/>
+        }
+      </svg>
+    </button>
+
+    <nav class="sidebar-nav">
+      @for (tab of tabs; track tab.id) {
+        <button
+          type="button"
+          class="nav-item"
+          [class.nav-active]="activeTab() === tab.id"
+          (click)="setTab(tab.id)"
+          [title]="tab.label"
+        >
+          <span class="nav-icon" [innerHTML]="tab.icon"></span>
+          @if (!sidebarCollapsed()) {
+            <span class="nav-label">{{ tab.label }}</span>
+          }
+          @if (!sidebarCollapsed() && tab.badge) {
+            <span class="nav-badge">{{ tab.badge }}</span>
+          }
+        </button>
+      }
+    </nav>
+
+    @if (!sidebarCollapsed()) {
+      <div class="sidebar-user">
+        <div class="user-avatar">{{ auth.currentUser()?.name?.charAt(0) || 'A' }}</div>
+        <div class="user-info">
+          <p class="user-name">{{ auth.currentUser()?.name || 'Admin' }}</p>
+          <p class="user-role">Super Admin</p>
+        </div>
+        <button class="btn-outline" style="padding: 0.4rem; border: none;" (click)="logoutAdmin()" title="Logout">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    }
+  </aside>
+
+  <main class="main-content" [class.main-expanded]="sidebarCollapsed()">
+
+    <header class="topbar">
+      <div class="topbar-left">
+        <h1 class="page-title">{{ currentTabLabel() }}</h1>
+        <div class="breadcrumb">
+          <span>Watchera</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          <span>{{ currentTabLabel() }}</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-stat">
+          <span class="stat-dot dot-green"></span>
+          <span>System Online</span>
+        </div>
+        <button class="btn-outline" style="padding: 0.4rem;" (click)="refreshAll()" title="Refresh">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        </button>
+        <div class="topbar-date">{{ today | date:'EEE, dd MMM y' }}</div>
+      </div>
+    </header>
+
+    @if (activeTab() === 'dashboard') {
+      <section class="tab-section">
+
+        <div class="section-toolbar">
+          <div class="toolbar-title">
+            <span class="toolbar-tag">Overview</span>
+            <h2 class="section-heading">Business Metrics</h2>
+          </div>
+          <div class="toolbar-actions">
+            <div class="range-selector">
+              @for (range of reportRanges; track range) {
+                <button
+                  type="button"
+                  class="range-btn"
+                  [class.range-active]="dashboardRange() === range"
+                  (click)="dashboardRange.set(range); refreshDashboard()"
+                >{{ range | titlecase }}</button>
+              }
+            </div>
+          </div>
+        </div>
+
+        @if (dashboard(); as data) {
+
+          <div class="kpi-grid">
+            <article class="kpi-card kpi-gold">
+              <div class="kpi-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </div>
+              <div class="kpi-data">
+                <p class="kpi-label">Total Revenue</p>
+                <p class="kpi-value">{{ data.summary.totalRevenue | currency:'INR':'symbol':'1.0-0' }}</p>
+                <p class="kpi-change kpi-up">+12.4% this period</p>
+              </div>
+            </article>
+
+            <article class="kpi-card">
+              <div class="kpi-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              </div>
+              <div class="kpi-data">
+                <p class="kpi-label">Total Orders</p>
+                <p class="kpi-value">{{ data.summary.totalOrders }}</p>
+                <p class="kpi-change kpi-up">+8.1% vs last</p>
+              </div>
+            </article>
+
+            <article class="kpi-card">
+              <div class="kpi-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <div class="kpi-data">
+                <p class="kpi-label">Customers</p>
+                <p class="kpi-value">{{ data.summary.totalCustomers }}</p>
+                <p class="kpi-change kpi-up">+5.3% growth</p>
+              </div>
+            </article>
+
+            <article class="kpi-card">
+              <div class="kpi-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              </div>
+              <div class="kpi-data">
+                <p class="kpi-label">Products</p>
+                <p class="kpi-value">{{ data.summary.totalProducts }}</p>
+                <p class="kpi-change kpi-neutral">Active catalog</p>
+              </div>
+            </article>
+
+            <article class="kpi-card kpi-warn">
+              <div class="kpi-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div class="kpi-data">
+                <p class="kpi-label">Pending Orders</p>
+                <p class="kpi-value kpi-amber">{{ data.summary.pendingOrders }}</p>
+                <p class="kpi-change kpi-down">Needs attention</p>
+              </div>
+            </article>
+
+            <article class="kpi-card kpi-danger">
+              <div class="kpi-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </div>
+              <div class="kpi-data">
+                <p class="kpi-label">Low Stock</p>
+                <p class="kpi-value kpi-rose">{{ data.summary.lowStockProducts }}</p>
+                <p class="kpi-change kpi-down">Restock needed</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="time-sales-grid">
+            <article class="time-card">
+              <p class="time-label">Today</p>
+              <p class="time-value">{{ data.summary.salesToday | currency:'INR':'symbol':'1.0-0' }}</p>
+            </article>
+            <article class="time-card">
+              <p class="time-label">This Week</p>
+              <p class="time-value">{{ data.summary.salesWeekly | currency:'INR':'symbol':'1.0-0' }}</p>
+            </article>
+            <article class="time-card">
+              <p class="time-label">This Month</p>
+              <p class="time-value">{{ data.summary.salesMonthly | currency:'INR':'symbol':'1.0-0' }}</p>
+            </article>
+            <article class="time-card">
+              <p class="time-label">This Year</p>
+              <p class="time-value">{{ data.summary.salesYearly | currency:'INR':'symbol':'1.0-0' }}</p>
+            </article>
+          </div>
+
+          <div class="dash-bottom-grid">
+
+            <div class="card-panel chart-panel">
+              <div class="panel-header">
+                <h3 class="panel-title">Sales Trend</h3>
+                <span class="panel-badge">{{ dashboardRange() | titlecase }}</span>
+              </div>
+              <div class="chart-area">
+                <svg class="line-chart-svg" viewBox="0 0 400 120" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#eab308" stop-opacity="0.3"/>
+                      <stop offset="100%" stop-color="#eab308" stop-opacity="0"/>
+                    </linearGradient>
+                  </defs>
+                  <path [attr.d]="areaPath(data.salesSeries, maxDashboardSeries())" fill="url(#chartGrad)"/>
+                  <polyline [attr.points]="linePoints(data.salesSeries, maxDashboardSeries())" fill="none" stroke="#eab308" stroke-width="2" stroke-linejoin="round"/>
+                  @for (pt of chartDots(data.salesSeries, maxDashboardSeries()); track pt.x) {
+                    <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="4" fill="#eab308"/>
+                  }
+                </svg>
+                <div class="chart-labels">
+                  @for (point of data.salesSeries; track point.label) {
+                    <span class="chart-label">{{ point.label }}</span>
+                  }
+                </div>
+              </div>
+              <div class="bar-list">
+                @for (point of data.salesSeries; track point.label) {
+                  <div class="bar-row">
+                    <span class="bar-label">{{ point.label }}</span>
+                    <div class="bar-track">
+                      <div class="bar-fill" [style.width]="barWidth(point.value, maxDashboardSeries())"></div>
+                    </div>
+                    <span class="bar-val">{{ point.value | currency:'INR':'symbol':'1.0-0' }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="card-panel">
+              <div class="panel-header">
+                <h3 class="panel-title">Top Watches</h3>
+                <span class="panel-badge">By Revenue</span>
+              </div>
+              <div class="list-rows">
+                @for (item of data.topSelling; let i = $index; track item.productId) {
+                  <article class="list-row">
+                    <span class="rank-num">{{ i + 1 }}</span>
+                    <img [src]="item.image || 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=300'" [alt]="item.name" class="row-thumb"/>
+                    <div class="row-meta">
+                      <p class="row-name">{{ item.name }}</p>
+                      <p class="row-sub">Qty: {{ item.quantity }}</p>
+                    </div>
+                    <p class="row-value">{{ item.revenue | currency:'INR':'symbol':'1.0-0' }}</p>
+                  </article>
+                }
+              </div>
+            </div>
+
+            <div class="card-panel">
+              <div class="panel-header">
+                <h3 class="panel-title">Recent Orders</h3>
+                <button class="panel-link" (click)="setTab('orders')">View All →</button>
+              </div>
+              <div class="list-rows">
+                @for (order of data.recentOrders; track order._id) {
+                  <article class="list-row">
+                    <div class="order-dot" [ngClass]="orderDotClass(order.orderStatus)"></div>
+                    <div class="row-meta">
+                      <p class="row-name">{{ order.user?.name || 'Guest' }}</p>
+                      <p class="row-sub">{{ order.createdAt | date:'dd MMM y' }}</p>
+                    </div>
+                    <div class="row-right">
+                      <p class="row-value">{{ order.totalPrice | currency:'INR':'symbol':'1.0-0' }}</p>
+                      <span class="status-pill" [ngClass]="statusPillClass(order.orderStatus)">{{ order.orderStatus }}</span>
+                    </div>
+                  </article>
+                }
+              </div>
+            </div>
+
+            <div class="card-panel">
+              <div class="panel-header">
+                <h3 class="panel-title">New Customers</h3>
+                <button class="panel-link" (click)="setTab('users')">View All →</button>
+              </div>
+              <div class="list-rows">
+                @for (customer of data.recentCustomers; track customer._id) {
+                  <article class="list-row">
+                    <div class="cust-avatar">{{ customer.name.charAt(0) }}</div>
+                    <div class="row-meta">
+                      <p class="row-name">{{ customer.name }}</p>
+                      <p class="row-sub">{{ customer.email }}</p>
+                    </div>
+                    <p class="row-sub">{{ customer.createdAt | date:'dd MMM' }}</p>
+                  </article>
+                }
+              </div>
+            </div>
+          </div>
+
+        }
+      </section>
+    }
+
+    @if (activeTab() === 'products') {
+      <section class="tab-section">
+
+        <div class="section-toolbar">
+          <div class="toolbar-title">
+            <span class="toolbar-tag">Catalog</span>
+            <h2 class="section-heading">Product Management</h2>
+          </div>
+          <div class="toolbar-actions">
+            <button type="button" class="btn-outline" (click)="loadProducts()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              Reload
+            </button>
+            <button type="button" class="btn-primary" (click)="openCreateProductForm()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Product
+            </button>
+          </div>
+        </div>
+
+        @if (productFormOpen()) {
+          <div class="form-panel">
+            <div class="form-panel-header">
+              <h3 class="form-panel-title">{{ editingProductId() ? 'Update Product' : 'New Product' }}</h3>
+              <button type="button" class="form-close" (click)="closeProductForm()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+
+            <div class="form-grid">
+              <label class="form-field">
+                <span class="form-label">Name *</span>
+                <input class="form-input" [(ngModel)]="productDraft.name" placeholder="e.g. Royal Chronograph Pro"/>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Brand *</span>
+                <input class="form-input" [(ngModel)]="productDraft.brand" placeholder="e.g. Rolex"/>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Model Number</span>
+                <input class="form-input" [(ngModel)]="productDraft.modelNumber" placeholder="MOD-001"/>
+              </label>
+              <label class="form-field">
+                <span class="form-label">SKU</span>
+                <input class="form-input" [(ngModel)]="productDraft.sku" placeholder="WTC-001"/>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Slug</span>
+                <input class="form-input" [(ngModel)]="productDraft.slug" placeholder="royal-chronograph-pro"/>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Subcategory</span>
+                <input class="form-input" [(ngModel)]="productDraft.subcategory" placeholder="Chronograph"/>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Category</span>
+                <select class="form-input" [(ngModel)]="productDraft.category">
+                  <option value="Luxury">Luxury</option>
+                  <option value="Sport">Sport</option>
+                  <option value="Casual">Casual</option>
+                  <option value="Smart">Smart</option>
+                </select>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Gender</span>
+                <select class="form-input" [(ngModel)]="productDraft.gender">
+                  <option value="Men">Men</option>
+                  <option value="Women">Women</option>
+                  <option value="Unisex">Unisex</option>
+                </select>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Price (₹) *</span>
+                <input class="form-input" type="number" [(ngModel)]="productDraft.price" placeholder="150000"/>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Discount Price (₹)</span>
+                <input class="form-input" type="number" [(ngModel)]="productDraft.discountPrice" placeholder="130000"/>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Stock *</span>
+                <input class="form-input" type="number" [(ngModel)]="productDraft.stock" placeholder="50"/>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Case Material</span>
+                <input class="form-input" [(ngModel)]="productDraft.caseMaterial" placeholder="Stainless Steel"/>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Strap Material</span>
+                <input class="form-input" [(ngModel)]="productDraft.strapMaterial" placeholder="Leather"/>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Dial Color</span>
+                <input class="form-input" [(ngModel)]="productDraft.dialColor" placeholder="Black"/>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Case Size</span>
+                <input class="form-input" [(ngModel)]="productDraft.caseSize" placeholder="42mm"/>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Water Resistance</span>
+                <input class="form-input" [(ngModel)]="productDraft.waterResistance" placeholder="100m"/>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Movement</span>
+                <input class="form-input" [(ngModel)]="productDraft.movement" placeholder="Automatic"/>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Warranty</span>
+                <input class="form-input" [(ngModel)]="productDraft.warranty" placeholder="2 Years"/>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Video URL</span>
+                <input class="form-input" [(ngModel)]="productDraft.video" placeholder="https://..."/>
+              </label>
+            </div>
+
+            <div class="form-grid-full">
+              <label class="form-field">
+                <span class="form-label">Short Description</span>
+                <textarea class="form-input form-textarea" rows="2" [(ngModel)]="productDraft.shortDescription" placeholder="Brief product summary..."></textarea>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Description</span>
+                <textarea class="form-input form-textarea" rows="4" [(ngModel)]="productDraft.description" placeholder="Full product description..."></textarea>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Image URLs (one per line)</span>
+                <textarea class="form-input form-textarea" rows="3" [(ngModel)]="productDraft.imagesText" placeholder="https://image1.jpg&#10;https://image2.jpg"></textarea>
+              </label>
+            </div>
+
+            <div class="toggle-row">
+              <label class="toggle-chip">
+                <input type="checkbox" [(ngModel)]="productDraft.isFeatured"/>
+                <span>Featured</span>
+              </label>
+              <label class="toggle-chip">
+                <input type="checkbox" [(ngModel)]="productDraft.isNewArrival"/>
+                <span>New Arrival</span>
+              </label>
+              <label class="toggle-chip">
+                <input type="checkbox" [(ngModel)]="productDraft.isBestSeller"/>
+                <span>Best Seller</span>
+              </label>
+              <label class="toggle-chip">
+                <input type="checkbox" [(ngModel)]="productDraft.isActive"/>
+                <span>Active</span>
+              </label>
+            </div>
+
+            <div class="form-footer">
+              <button type="button" class="btn-ghost" (click)="closeProductForm()">Cancel</button>
+              <button type="button" class="btn-primary" [disabled]="savingProduct()" (click)="saveProduct()">
+                @if (savingProduct()) {
+                  <span class="spinner"></span> Saving...
+                } @else {
+                  {{ editingProductId() ? 'Update Product' : 'Create Product' }}
+                }
+              </button>
+            </div>
+          </div>
+        }
+
+        <div class="table-panel">
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Stock</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (product of products(); track product._id) {
+                  <tr>
+                    <td>
+                      <div class="product-cell">
+                        <img [src]="product.images[0] || 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=300'" [alt]="product.name" class="product-thumb"/>
+                        <div>
+                          <p class="text-xl cell-primary" [title]="product.name">
+                            {{ (product.name || '').length > 8 ? ((product.name || '') | slice:0:8) + '...' : product.name }}
+                          </p>
+                          <p class="cell-sub">{{ product.brand }} · {{ product.sku }}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <p class="cell-primary" [title]="product.category">
+                        {{ (product.category || '').length > 8 ? ((product.category || '') | slice:0:8) + '...' : product.category }}
+                      </p>
+                      <p class="cell-sub">{{ product.gender }}</p>
+                    </td>
+                    <td>
+                      <p class="cell-primary" [title]="product.price | currency:'INR':'symbol':'1.0-0'">
+                        {{ ((product.price | currency:'INR':'symbol':'1.0-0') || '').length > 8 ? (((product.price | currency:'INR':'symbol':'1.0-0') || '') | slice:0:8) + '...' : (product.price | currency:'INR':'symbol':'1.0-0') }}
+                      </p>
+                      @if (product.discountPrice) {
+                        <p class="cell-sub line-through" [title]="product.discountPrice | currency:'INR':'symbol':'1.0-0'">
+                          {{ ((product.discountPrice | currency:'INR':'symbol':'1.0-0') || '').length > 8 ? (((product.discountPrice | currency:'INR':'symbol':'1.0-0') || '') | slice:0:8) + '...' : (product.discountPrice | currency:'INR':'symbol':'1.0-0') }}
+                        </p>
+                      }
+                    </td>
+                    <td>
+                      <span class="stock-badge" [class.stock-low]="product.stock <= 5" [class.stock-ok]="product.stock > 5">
+                        {{ product.stock }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="status-pill" [class.pill-active]="product.isActive" [class.pill-inactive]="!product.isActive">
+                        {{ product.isActive ? 'Active' : 'Inactive' }}
+                      </span>
+                    </td>
+                    <td>
+                      <div class="action-btns">
+                        <button type="button" class="act-edit" (click)="editProduct(product)">Edit</button>
+                        <button type="button" class="act-delete" (click)="deleteProduct(product)">Delete</button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="two-col-grid">
+          <div class="card-panel">
+            <div class="panel-header">
+              <h3 class="panel-title">⚠ Low Stock Alerts</h3>
+            </div>
+            <div class="list-rows">
+              @for (product of lowStockProducts(); track product._id) {
+                <article class="list-row">
+                  <div class="row-meta">
+                    <p class="row-name">{{ product.name }}</p>
+                    <p class="row-sub">Current Stock: {{ product.stock }}</p>
+                  </div>
+                  <div class="action-btns">
+                    <button type="button" class="act-edit" (click)="adjustStock(product, -1)">−1</button>
+                    <button type="button" class="btn-primary btn-sm" (click)="adjustStock(product, 5)">+5</button>
+                  </div>
+                </article>
+              } @empty {
+                <p class="empty-state">All products have adequate stock.</p>
+              }
+            </div>
+          </div>
+
+          <div class="card-panel">
+            <div class="panel-header">
+              <h3 class="panel-title">🚫 Out of Stock</h3>
+            </div>
+            <div class="list-rows">
+              @for (product of outOfStockProducts(); track product._id) {
+                <article class="list-row">
+                  <div class="row-meta">
+                    <p class="row-name">{{ product.name }}</p>
+                    <p class="row-sub">SKU: {{ product.sku }}</p>
+                  </div>
+                  <button type="button" class="btn-primary btn-sm" (click)="updateStock(product, 10)">Restock ×10</button>
+                </article>
+              } @empty {
+                <p class="empty-state empty-ok">✓ No out-of-stock products.</p>
+              }
+            </div>
+          </div>
+        </div>
+
+      </section>
+    }
+
+    @if (activeTab() === 'users') {
+      <section class="tab-section">
+        <div class="section-toolbar">
+          <div class="toolbar-title">
+            <span class="toolbar-tag">Customers</span>
+            <h2 class="section-heading">User Management</h2>
+          </div>
+          <div class="toolbar-actions">
+            <button type="button" class="btn-outline" (click)="loadUsers()">Reload</button>
+          </div>
+        </div>
+
+        <div class="table-panel">
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Contact</th>
+                  <th>Orders</th>
+                  <th>Total Spent</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (user of users(); track user._id) {
+                  <tr>
+                    <td>
+                      <div class="product-cell">
+                        <div class="cust-avatar">{{ user.name.charAt(0) }}</div>
+                        <div>
+                          <p class="cell-primary">{{ user.name }}</p>
+                          <p class="cell-sub">Joined {{ user.createdAt | date:'dd MMM y' }}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <p class="cell-primary">{{ user.email }}</p>
+                      <p class="cell-sub">+91-00000-00000</p>
+                    </td>
+                    <td>
+                      <p class="cell-primary">{{ customerOrderCount(user._id) }} orders</p>
+                    </td>
+                    <td>
+                      <p class="cell-primary">{{ customerTotalSpend(user._id) | currency:'INR':'symbol':'1.0-0' }}</p>
+                    </td>
+                    <td>
+                      <span class="status-pill" [class.pill-active]="user.isActive" [class.pill-inactive]="!user.isActive">
+                        {{ user.isActive ? 'Active' : 'Blocked' }}
+                      </span>
+                    </td>
+                    <td>
+                      @if (user.role !== 'admin') {
+                        <div class="action-btns">
+                          <button type="button" class="act-edit" (click)="toggleUserStatus(user)">
+                            {{ user.isActive ? 'Block' : 'Unblock' }}
+                          </button>
+                          <button type="button" class="act-delete" (click)="deleteUser(user)">Delete</button>
+                        </div>
+                      } @else {
+                        <span class="cell-sub">Admin</span>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+    }
+
+    @if (activeTab() === 'orders') {
+      <section class="tab-section">
+        <div class="section-toolbar">
+          <div class="toolbar-title">
+            <span class="toolbar-tag">Sales Flow</span>
+            <h2 class="section-heading">Order Management</h2>
+          </div>
+          <div class="toolbar-actions">
+            <button type="button" class="btn-outline" (click)="loadOrders()">Reload</button>
+          </div>
+        </div>
+
+        <div class="table-panel">
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Items</th>
+                  <th>Amount</th>
+                  <th>Payment</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Invoice</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (order of orders(); track order._id) {
+                  <tr>
+                    <td>
+                      <p class="cell-primary mono">#{{ order._id.slice(-8).toUpperCase() }}</p>
+                    </td>
+                    <td>
+                      <p class="cell-primary">{{ order.user?.name || 'Guest' }}</p>
+                      <p class="cell-sub">{{ order.user?.email }}</p>
+                    </td>
+                    <td>
+                      <span class="badge-neutral">{{ order.itemCount }} item(s)</span>
+                    </td>
+                    <td>
+                      <p class="cell-primary gold">{{ order.totalPrice | currency:'INR':'symbol':'1.0-0' }}</p>
+                    </td>
+                    <td>
+                      <p class="cell-sub">{{ order.paymentMethod }}</p>
+                    </td>
+                    <td>
+                      <select
+                        class="status-select"
+                        [ngModel]="order.orderStatus"
+                        (ngModelChange)="updateOrderStatus(order, $event)"
+                      >
+                        @for (status of orderStatusOptions; track status) {
+                          <option [value]="status">{{ status }}</option>
+                        }
+                      </select>
+                      @if (updatingOrderId() === order._id) {
+                        <p class="updating-hint">Saving…</p>
+                      }
+                    </td>
+                    <td>
+                      <p class="cell-sub">{{ order.createdAt | date:'dd MMM y' }}</p>
+                      <p class="cell-sub">{{ order.createdAt | date:'h:mm a' }}</p>
+                    </td>
+                    <td>
+                      <div class="action-btns">
+                        <button type="button" class="act-edit" (click)="downloadInvoicePdf(order)">PDF</button>
+                        <button type="button" class="btn-primary btn-sm" (click)="printInvoice(order)">Print</button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+    }
+
+    @if (activeTab() === 'payments') {
+      <section class="tab-section">
+        <div class="section-toolbar">
+          <div class="toolbar-title">
+            <span class="toolbar-tag">Finance</span>
+            <h2 class="section-heading">Transactions &amp; Refunds</h2>
+          </div>
+          <div class="toolbar-actions">
+            <div class="filter-pills">
+              @for (filter of paymentFilters; track filter) {
+                <button
+                  type="button"
+                  class="filter-pill"
+                  [class.filter-pill-active]="paymentFilter() === filter"
+                  (click)="setPaymentFilter(filter)"
+                >{{ filter }}</button>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="table-panel">
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Transaction ID</th>
+                  <th>Order</th>
+                  <th>Customer</th>
+                  <th>Gateway</th>
+                  <th>Method</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of filteredPaymentRows(); track row.orderId) {
+                  <tr>
+                    <td><p class="cell-sub mono">{{ row.transactionId }}</p></td>
+                    <td><p class="cell-primary mono">#{{ row.orderId.slice(-8).toUpperCase() }}</p></td>
+                    <td><p class="cell-primary">{{ row.customerName }}</p></td>
+                    <td><p class="cell-sub">{{ row.gateway }}</p></td>
+                    <td><p class="cell-sub">{{ row.method }}</p></td>
+                    <td><p class="cell-primary gold">{{ row.amount | currency:'INR':'symbol':'1.0-0' }}</p></td>
+                    <td>
+                      <span class="status-pill" [ngClass]="paymentPillClass(row.status)">{{ row.status }}</span>
+                    </td>
+                    <td>
+                      <button type="button" class="act-edit" (click)="processRefund(row)" [disabled]="row.status !== 'Paid'">
+                        Refund
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+    }
+
+    @if (activeTab() === 'coupons') {
+      <section class="tab-section">
+        <div class="section-toolbar">
+          <div class="toolbar-title">
+            <span class="toolbar-tag">Offers</span>
+            <h2 class="section-heading">Coupons &amp; Discounts</h2>
+          </div>
+        </div>
+
+        <div class="form-panel">
+          <div class="form-panel-header">
+            <h3 class="form-panel-title">Create New Coupon</h3>
+          </div>
+          <div class="form-grid">
+            <label class="form-field">
+              <span class="form-label">Coupon Code *</span>
+              <input class="form-input" [(ngModel)]="couponForm.code" placeholder="WATCH10"/>
+            </label>
+            <label class="form-field">
+              <span class="form-label">Discount Type</span>
+              <select class="form-input" [(ngModel)]="couponForm.discountType">
+                <option value="Percentage">Percentage (%)</option>
+                <option value="Flat">Flat Amount (₹)</option>
+              </select>
+            </label>
+            <label class="form-field">
+              <span class="form-label">Value</span>
+              <input class="form-input" type="number" [(ngModel)]="couponForm.value" placeholder="10"/>
+            </label>
+            <label class="form-field">
+              <span class="form-label">Min Purchase (₹)</span>
+              <input class="form-input" type="number" [(ngModel)]="couponForm.minPurchase" placeholder="5000"/>
+            </label>
+            <label class="form-field">
+              <span class="form-label">Expiry Date</span>
+              <input class="form-input" type="date" [(ngModel)]="couponForm.expiryDate"/>
+            </label>
+            <label class="form-field">
+              <span class="form-label">Usage Limit</span>
+              <input class="form-input" type="number" [(ngModel)]="couponForm.usageLimit" placeholder="100"/>
+            </label>
+          </div>
+          <div class="form-footer">
+            <label class="toggle-chip">
+              <input type="checkbox" [(ngModel)]="couponForm.active"/>
+              <span>Active</span>
+            </label>
+            <button type="button" class="btn-primary" (click)="saveCoupon()">Create Coupon</button>
+          </div>
+        </div>
+
+        <div class="table-panel">
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Type</th>
+                  <th>Value</th>
+                  <th>Min Purchase</th>
+                  <th>Expiry</th>
+                  <th>Usage Limit</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (coupon of coupons(); track coupon.id) {
+                  <tr>
+                    <td><p class="cell-primary gold mono">{{ coupon.code }}</p></td>
+                    <td><p class="cell-sub">{{ coupon.discountType }}</p></td>
+                    <td><p class="cell-primary">{{ coupon.value }}{{ coupon.discountType === 'Percentage' ? '%' : '₹' }}</p></td>
+                    <td><p class="cell-sub">{{ coupon.minPurchase | currency:'INR':'symbol':'1.0-0' }}</p></td>
+                    <td><p class="cell-sub">{{ coupon.expiryDate }}</p></td>
+                    <td><p class="cell-sub">{{ coupon.usageLimit }}</p></td>
+                    <td>
+                      <span class="status-pill" [class.pill-active]="coupon.active" [class.pill-inactive]="!coupon.active">
+                        {{ coupon.active ? 'Active' : 'Inactive' }}
+                      </span>
+                    </td>
+                    <td>
+                      <div class="action-btns">
+                        <button type="button" class="act-edit" (click)="toggleCoupon(coupon)">
+                          {{ coupon.active ? 'Deactivate' : 'Activate' }}
+                        </button>
+                        <button type="button" class="act-delete" (click)="deleteCoupon(coupon)">Delete</button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+    }
+
+    @if (activeTab() === 'banners') {
+      <section class="tab-section">
+        <div class="section-toolbar">
+          <div class="toolbar-title">
+            <span class="toolbar-tag">Content</span>
+            <h2 class="section-heading">Homepage Banners</h2>
+          </div>
+        </div>
+
+        <div class="form-panel">
+          <div class="form-panel-header">
+            <h3 class="form-panel-title">Add New Banner</h3>
+          </div>
+          <div class="form-grid">
+            <label class="form-field">
+              <span class="form-label">Banner Title *</span>
+              <input class="form-input" [(ngModel)]="bannerForm.title" placeholder="Summer Luxury Sale"/>
+            </label>
+            <label class="form-field">
+              <span class="form-label">Image URL *</span>
+              <input class="form-input" [(ngModel)]="bannerForm.imageUrl" placeholder="https://..."/>
+            </label>
+            <label class="form-field">
+              <span class="form-label">Redirect Link</span>
+              <input class="form-input" [(ngModel)]="bannerForm.redirectLink" placeholder="/collections/luxury"/>
+            </label>
+            <label class="form-field">
+              <span class="form-label">Status</span>
+              <select class="form-input" [(ngModel)]="bannerForm.status">
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </label>
+          </div>
+          <div class="form-footer">
+            <button type="button" class="btn-primary" (click)="saveBanner()">Add Banner</button>
+          </div>
+        </div>
+
+        <div class="banner-grid">
+          @for (banner of banners(); track banner.id) {
+            <article class="banner-card">
+              <div class="banner-img-wrap">
+                <img [src]="banner.imageUrl" [alt]="banner.title" class="banner-img"/>
+                <span class="banner-status-overlay" [class.overlay-active]="banner.status === 'Active'" [class.overlay-inactive]="banner.status !== 'Active'">
+                  {{ banner.status }}
+                </span>
+              </div>
+              <div class="banner-footer">
+                <div>
+                  <p class="cell-primary">{{ banner.title }}</p>
+                  <p class="cell-sub">{{ banner.redirectLink || 'No redirect' }}</p>
+                </div>
+                <div class="action-btns">
+                  <button type="button" class="act-edit" (click)="toggleBanner(banner)">Toggle</button>
+                  <button type="button" class="act-delete" (click)="deleteBanner(banner)">Delete</button>
+                </div>
+              </div>
+            </article>
+          }
+        </div>
+
+      </section>
+    }
+
+    @if (activeTab() === 'inventory') {
+      <section class="tab-section">
+        <div class="section-toolbar">
+          <div class="toolbar-title">
+            <span class="toolbar-tag">Stock</span>
+            <h2 class="section-heading">Inventory Overview</h2>
+          </div>
+          <div class="toolbar-actions">
+            <button type="button" class="btn-outline" (click)="exportInventoryCsv()">Export Stock Excel</button>
+            <button type="button" class="btn-primary" (click)="exportProfitCsv()">Export Profit CSV</button>
+          </div>
+        </div>
+
+        <div class="kpi-grid kpi-grid-4">
+          <article class="kpi-card">
+            <div class="kpi-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>
+            <div class="kpi-data">
+              <p class="kpi-label">Total Products</p>
+              <p class="kpi-value">{{ products().length }}</p>
+            </div>
+          </article>
+          <article class="kpi-card kpi-warn">
+            <div class="kpi-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+            <div class="kpi-data">
+              <p class="kpi-label">Low Stock</p>
+              <p class="kpi-value kpi-amber">{{ lowStockProducts().length }}</p>
+            </div>
+          </article>
+          <article class="kpi-card kpi-danger">
+            <div class="kpi-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+            <div class="kpi-data">
+              <p class="kpi-label">Out of Stock</p>
+              <p class="kpi-value kpi-rose">{{ outOfStockProducts().length }}</p>
+            </div>
+          </article>
+          <article class="kpi-card kpi-gold">
+            <div class="kpi-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+            <div class="kpi-data">
+              <p class="kpi-label">Stock Value</p>
+              <p class="kpi-value">{{ stockValue() | currency:'INR':'symbol':'1.0-0' }}</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="table-panel">
+          <div class="panel-header" style="border-bottom: none; padding-bottom: 0;">
+            <h3 class="panel-title">Stock Ledger</h3>
+          </div>
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>SKU</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Stock</th>
+                  <th>Stock Value</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (product of products(); track product._id) {
+                  <tr>
+                    <td>
+                      <div class="product-cell">
+                        <img [src]="product.images[0] || 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=300'" [alt]="product.name" class="product-thumb"/>
+                        <p class="cell-primary">{{ product.name }}</p>
+                      </div>
+                    </td>
+                    <td><p class="cell-sub mono">{{ product.sku }}</p></td>
+                    <td><p class="cell-sub">{{ product.category }}</p></td>
+                    <td><p class="cell-primary">{{ product.price | currency:'INR':'symbol':'1.0-0' }}</p></td>
+                    <td>
+                      <span class="stock-badge" [class.stock-low]="product.stock <= 5" [class.stock-zero]="product.stock === 0" [class.stock-ok]="product.stock > 5">
+                        {{ product.stock }}
+                      </span>
+                    </td>
+                    <td><p class="cell-primary gold">{{ (product.price * product.stock) | currency:'INR':'symbol':'1.0-0' }}</p></td>
+                    <td>
+                      <span class="status-pill" [class.pill-active]="product.stock > 0" [class.pill-inactive]="product.stock === 0">
+                        {{ product.stock === 0 ? 'Out of Stock' : product.stock <= 5 ? 'Low' : 'In Stock' }}
+                      </span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+    }
+
+    @if (activeTab() === 'shipping') {
+      <section class="tab-section">
+        <div class="section-toolbar">
+          <div class="toolbar-title">
+            <span class="toolbar-tag">Logistics</span>
+            <h2 class="section-heading">Shipping Management</h2>
+          </div>
+        </div>
+
+        <div class="two-col-grid">
+
+          <div class="form-panel">
+            <div class="form-panel-header">
+              <h3 class="form-panel-title">Global Shipping Settings</h3>
+            </div>
+            <div class="form-grid form-grid-2">
+              <label class="form-field">
+                <span class="form-label">Flat Charge (₹)</span>
+                <input class="form-input" type="number" [(ngModel)]="shippingSettings.flatCharge" placeholder="99"/>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Free Shipping Min (₹)</span>
+                <input class="form-input" type="number" [(ngModel)]="shippingSettings.freeShippingThreshold" placeholder="5000"/>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Delivery Partner</span>
+                <select class="form-input" [(ngModel)]="shippingSettings.deliveryPartner">
+                  <option value="Delhivery">Delhivery</option>
+                  <option value="Blue Dart">Blue Dart</option>
+                  <option value="DTDC">DTDC</option>
+                  <option value="India Post">India Post</option>
+                </select>
+              </label>
+              <label class="form-field" style="justify-content: flex-end">
+                <span class="form-label">Free Shipping Toggle</span>
+                <label class="toggle-chip" style="margin-top:0.3rem">
+                  <input type="checkbox" [(ngModel)]="shippingSettings.freeShippingEnabled"/>
+                  <span>Enable Free Shipping</span>
+                </label>
+              </label>
+            </div>
+            <div class="form-footer">
+              <button type="button" class="btn-primary" (click)="saveShippingSettings()">Save Settings</button>
+            </div>
+          </div>
+
+          <div class="form-panel">
+            <div class="form-panel-header">
+              <h3 class="form-panel-title">Region Shipping Zones</h3>
+            </div>
+            <div class="form-grid form-grid-3">
+              <label class="form-field">
+                <span class="form-label">Region</span>
+                <input class="form-input" [(ngModel)]="shippingForm.region" placeholder="North India"/>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Cost (₹)</span>
+                <input class="form-input" type="number" [(ngModel)]="shippingForm.cost" placeholder="99"/>
+              </label>
+              <label class="form-field">
+                <span class="form-label">ETA</span>
+                <input class="form-input" [(ngModel)]="shippingForm.eta" placeholder="3-5 days"/>
+              </label>
+            </div>
+            <div class="form-footer">
+              <button type="button" class="btn-outline" (click)="addShippingZone()">Add Zone</button>
+            </div>
+            <div class="zone-list">
+              @for (zone of shippingZones(); track zone._id) {
+                <div class="zone-row">
+                  <div>
+                    <p class="cell-primary">{{ zone.region }}</p>
+                    <p class="cell-sub">{{ zone.cost | currency:'INR':'symbol':'1.0-0' }} · {{ zone.eta }}</p>
+                  </div>
+                  <button type="button" class="act-delete" (click)="removeShippingZone(zone)">Remove</button>
+                </div>
+              } @empty {
+                <p class="empty-state">No zones added yet.</p>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="card-panel">
+          <div class="panel-header">
+            <h3 class="panel-title">Tracking ID Updates</h3>
+            <span class="panel-badge">Recent Orders</span>
+          </div>
+          <div class="tracking-list">
+            @for (order of orders().slice(0, 6); track order._id) {
+              <div class="tracking-row">
+                <div class="tracking-info">
+                  <p class="cell-primary mono">#{{ order._id.slice(-8).toUpperCase() }}</p>
+                  <p class="cell-sub">{{ order.user?.name || 'Guest' }} · {{ order.createdAt | date:'dd MMM y' }}</p>
+                </div>
+                <input
+                  class="form-input tracking-input"
+                  [ngModel]="trackingValue(order._id)"
+                  (ngModelChange)="setTrackingValue(order._id, $event)"
+                  placeholder="Enter Tracking ID"
+                />
+                <button type="button" class="btn-outline btn-sm" (click)="saveTracking(order)">Update</button>
+              </div>
+            }
+          </div>
+        </div>
+
+      </section>
+    }
+
+    @if (activeTab() === 'reports') {
+      <section class="tab-section">
+        <div class="section-toolbar">
+          <div class="toolbar-title">
+            <span class="toolbar-tag">Analytics</span>
+            <h2 class="section-heading">Reports &amp; Analysis</h2>
+          </div>
+          <div class="toolbar-actions">
+            <div class="range-selector">
+              @for (range of reportRanges; track range) {
+                <button
+                  type="button"
+                  class="range-btn"
+                  [class.range-active]="reportRange() === range"
+                  (click)="reportRange.set(range)"
+                >{{ range | titlecase }}</button>
+              }
+            </div>
+            @if (reportRange() === 'custom') {
+              <input type="date" class="form-input date-input" [ngModel]="reportFrom()" (ngModelChange)="reportFrom.set($event)"/>
+              <input type="date" class="form-input date-input" [ngModel]="reportTo()" (ngModelChange)="reportTo.set($event)"/>
+            }
+            <button type="button" class="btn-outline" (click)="refreshReports()">Apply</button>
+            <button type="button" class="btn-primary" (click)="exportReportCsv()">Export CSV</button>
+          </div>
+        </div>
+
+        @if (reports(); as report) {
+
+          <div class="kpi-grid">
+            <article class="kpi-card kpi-gold">
+              <div class="kpi-data">
+                <p class="kpi-label">Revenue</p>
+                <p class="kpi-value">{{ report.summary.totalRevenue | currency:'INR':'symbol':'1.0-0' }}</p>
+              </div>
+            </article>
+            <article class="kpi-card">
+              <div class="kpi-data">
+                <p class="kpi-label">Orders</p>
+                <p class="kpi-value">{{ report.summary.totalOrders }}</p>
+              </div>
+            </article>
+            <article class="kpi-card">
+              <div class="kpi-data">
+                <p class="kpi-label">Units Sold</p>
+                <p class="kpi-value">{{ report.summary.unitsSold }}</p>
+              </div>
+            </article>
+            <article class="kpi-card">
+              <div class="kpi-data">
+                <p class="kpi-label">Avg Order</p>
+                <p class="kpi-value">{{ report.summary.averageOrderValue | currency:'INR':'symbol':'1.0-0' }}</p>
+              </div>
+            </article>
+            <article class="kpi-card kpi-warn">
+              <div class="kpi-data">
+                <p class="kpi-label">Low Stock</p>
+                <p class="kpi-value kpi-amber">{{ report.summary.lowStockProducts }}</p>
+              </div>
+            </article>
+            <article class="kpi-card kpi-danger">
+              <div class="kpi-data">
+                <p class="kpi-label">Out of Stock</p>
+                <p class="kpi-value kpi-rose">{{ report.summary.outOfStockProducts }}</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="time-sales-grid">
+            <article class="time-card">
+              <p class="time-label">Conversion Rate</p>
+              <p class="time-value">{{ conversionRate() | percent:'1.0-1' }}</p>
+            </article>
+            <article class="time-card">
+              <p class="time-label">Customer Growth</p>
+              <p class="time-value">{{ customerGrowthRate() | percent:'1.0-1' }}</p>
+            </article>
+            <article class="time-card">
+              <p class="time-label">Abandoned Cart</p>
+              <p class="time-value">{{ abandonedCartEstimate() }}</p>
+            </article>
+            <article class="time-card">
+              <p class="time-label">Top Products</p>
+              <p class="time-value">{{ report.topSelling.length }}</p>
+            </article>
+          </div>
+
+          <div class="report-grid">
+            <div class="card-panel">
+              <div class="panel-header">
+                <h3 class="panel-title">Sales Chart</h3>
+                <span class="panel-badge">{{ reportRange() | titlecase }}</span>
+              </div>
+              <div class="chart-area">
+                <svg class="line-chart-svg" viewBox="0 0 400 120" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="reportGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#eab308" stop-opacity="0.3"/>
+                      <stop offset="100%" stop-color="#eab308" stop-opacity="0"/>
+                    </linearGradient>
+                  </defs>
+                  <path [attr.d]="areaPath(report.salesSeries, maxReportSeries())" fill="url(#reportGrad)"/>
+                  <polyline [attr.points]="linePoints(report.salesSeries, maxReportSeries())" fill="none" stroke="#eab308" stroke-width="2" stroke-linejoin="round"/>
+                  @for (pt of chartDots(report.salesSeries, maxReportSeries()); track pt.x) {
+                    <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="4" fill="#eab308"/>
+                  }
+                </svg>
+                <div class="chart-labels">
+                  @for (point of report.salesSeries; track point.label) {
+                    <span class="chart-label">{{ point.label }}</span>
+                  }
+                </div>
+              </div>
+              <div class="bar-list">
+                @for (point of report.salesSeries; track point.label) {
+                  <div class="bar-row">
+                    <span class="bar-label">{{ point.label }}</span>
+                    <div class="bar-track">
+                      <div class="bar-fill" [style.width]="barWidth(point.value, maxReportSeries())"></div>
+                    </div>
+                    <span class="bar-val">{{ point.value | currency:'INR':'symbol':'1.0-0' }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="card-panel">
+              <div class="panel-header">
+                <h3 class="panel-title">Order Status Breakdown</h3>
+              </div>
+              <div class="status-breakdown">
+                @for (row of report.statusBreakdown; track row.status) {
+                  <div class="breakdown-row">
+                    <div class="breakdown-dot" [ngClass]="orderDotClass(row.status)"></div>
+                    <span class="breakdown-label">{{ row.status }}</span>
+                    <div class="breakdown-bar-track">
+                      <div class="breakdown-bar" [style.width]="barWidth(row.count, maxStatusCount(report.statusBreakdown))"></div>
+                    </div>
+                    <span class="breakdown-count">{{ row.count }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="card-panel">
+              <div class="panel-header">
+                <h3 class="panel-title">Top Selling Products</h3>
+              </div>
+              <div class="list-rows">
+                @for (item of report.topSelling; let i = $index; track item.productId) {
+                  <article class="list-row">
+                    <span class="rank-num">{{ i + 1 }}</span>
+                    <div class="row-meta">
+                      <p class="row-name">{{ item.name }}</p>
+                      <p class="row-sub">Qty: {{ item.quantity }}</p>
+                    </div>
+                    <p class="row-value">{{ item.revenue | currency:'INR':'symbol':'1.0-0' }}</p>
+                  </article>
+                }
+              </div>
+            </div>
+
+          </div>
+        }
+
+      </section>
+    }
+
+  </main>
+</div>

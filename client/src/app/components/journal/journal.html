@@ -1,0 +1,82 @@
+<div class="bg-[#050505] min-h-screen font-sans selection:bg-[#D4AF37] selection:text-black">
+
+  <section class="border-b border-white/10 pt-32 pb-16 bg-gradient-to-b from-[#111] to-[#050505]">
+    <div class="px-6 md:px-12 max-w-[90rem] mx-auto">
+      <div class="flex items-center gap-4 mb-6">
+        <div class="h-[1px] w-12 bg-[#D4AF37]"></div>
+        <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-[#D4AF37]" aria-live="polite">
+          Watchera Journal
+        </p>
+      </div>
+      <h1 class="max-w-4xl font-serif text-5xl text-white md:text-6xl lg:text-7xl leading-[1.1] tracking-wide">
+        Stories on watchmaking, care, and collector culture.
+      </h1>
+    </div>
+  </section>
+
+  <section class="py-16 px-6 md:px-12 max-w-[90rem] mx-auto">
+    <article class="group relative grid overflow-hidden rounded-2xl bg-[#0a0a0a] border border-white/5 transition-all duration-700 hover:border-white/20 hover:shadow-[0_8px_30px_rgb(0,0,0,0.8)] lg:grid-cols-2 items-stretch">
+      
+      <div class="relative min-h-[400px] w-full overflow-hidden bg-[#111] lg:h-full">
+        <div class="absolute inset-0 bg-black/20 z-10 group-hover:bg-transparent transition-colors duration-500"></div>
+        <img 
+          [src]="featuredStory.image" 
+          [alt]="featuredStory.title" 
+          class="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105" 
+        />
+      </div>
+      
+      <div class="flex flex-col justify-center p-10 md:p-14 lg:p-20 z-20">
+        <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-[#D4AF37] mb-5">
+          {{ featuredStory.category }}
+        </p>
+        <h2 class="font-serif text-4xl lg:text-5xl text-white leading-snug mb-6 transition-colors group-hover:text-gray-200">
+          {{ featuredStory.title }}
+        </h2>
+        <p class="text-gray-400 font-light leading-relaxed mb-10 text-sm md:text-base">
+          {{ featuredStory.excerpt }}
+        </p>
+        <div>
+          <a routerLink="/collections" class="inline-flex items-center justify-center rounded border border-white/20 bg-transparent px-8 py-3.5 text-[10px] font-bold uppercase tracking-[0.15em] text-white transition-all hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-black focus:outline-none">
+            Explore Watches
+          </a>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="pb-24 px-6 md:px-12 max-w-[90rem] mx-auto">
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+      @for (story of stories; track story.title) {
+        <article class="group flex flex-col justify-between rounded-xl border border-white/5 bg-[#0a0a0a] p-8 md:p-10 transition-all duration-500 hover:border-white/20 hover:shadow-2xl hover:-translate-y-1">
+          
+          <div>
+            <p class="text-[9px] font-bold uppercase tracking-[0.25em] text-[#D4AF37] mb-4">
+              {{ story.category }}
+            </p>
+            <h3 class="font-serif text-2xl md:text-3xl text-white mb-4 line-clamp-2 transition-colors group-hover:text-gray-200">
+              {{ story.title }}
+            </h3>
+            <p class="text-gray-400 font-light text-sm leading-relaxed line-clamp-3">
+              {{ story.excerpt }}
+            </p>
+          </div>
+          
+          <div class="mt-10 pt-6 border-t border-white/5 flex items-center justify-between">
+            <span class="text-[10px] font-medium uppercase tracking-[0.2em] text-gray-500">
+              {{ story.readTime }}
+            </span>
+            <a routerLink="/concierge" class="text-[10px] font-bold uppercase tracking-[0.15em] text-white flex items-center gap-2 transition-colors hover:text-[#D4AF37]">
+              Ask Concierge
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+              </svg>
+            </a>
+          </div>
+          
+        </article>
+      }
+    </div>
+  </section>
+
+</div>

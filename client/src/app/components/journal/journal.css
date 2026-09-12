@@ -1,0 +1,9 @@
+:host {
+  display: block;
+}
+
+/* Optional: If you want to refine the text selection highlight to match the brand */
+::selection {
+  background-color: #D4AF37;
+  color: #000;
+}

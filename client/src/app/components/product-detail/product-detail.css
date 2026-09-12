@@ -1,0 +1,58 @@
+:host {
+  display: block;
+}
+
+/* Optional: Subtle animation for the tab panels entering */
+[role="tabpanel"] {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hide scrollbar for the thumbnail container if it overflows on very small screens */
+[role="tablist"]::-webkit-scrollbar {
+  height: 4px;
+}
+[role="tablist"]::-webkit-scrollbar-track {
+  background: transparent;
+}
+[role="tablist"]::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+[role="tablist"]::-webkit-scrollbar-thumb:hover {
+  background: #d4af37;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Lightbox smooth entry animation */
+.lightbox-enter {
+  animation: lightboxFadeIn 0.3s ease-out forwards;
+}
+
+@keyframes lightboxFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

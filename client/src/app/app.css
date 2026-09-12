@@ -1,0 +1,10 @@
+:host {
+  display: block;
+}
+
+.app-shell {
+  background:
+    radial-gradient(80rem 40rem at 10% -20%, rgb(212 175 55 / 0.12), transparent 50%),
+    radial-gradient(70rem 35rem at 100% 0%, rgb(212 175 55 / 0.08), transparent 45%),
+    #05070b;
+}

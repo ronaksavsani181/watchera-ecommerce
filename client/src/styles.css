@@ -1,0 +1,154 @@
+@import "tailwindcss";
+
+@theme {
+  --color-luxury-gold: #d4af37;
+  --color-luxury-gold-soft: #f3d988;
+  --color-brand-ink: #05070b;
+  --color-brand-panel: #10141c;
+  --color-brand-border: #1f2733;
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+  --font-serif: "Cormorant Garamond", serif;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background-color: #05070b;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: rgb(226 232 240);
+  line-height: 1.5;
+}
+
+.luxury-container {
+  width: min(1200px, 100% - 2rem);
+  margin-inline: auto;
+}
+
+.btn-primary {
+  border: 1px solid rgb(212 175 55 / 0.8);
+  background: linear-gradient(135deg, #f3d988 0%, #d4af37 45%, #b8922e 100%);
+  color: #0a0a0a;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: transform 220ms ease, box-shadow 220ms ease, filter 220ms ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgb(212 175 55 / 0.25);
+  filter: saturate(1.08);
+}
+
+.btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-ghost {
+  border: 1px solid rgb(255 255 255 / 0.2);
+  color: rgb(226 232 240);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  transition: border-color 200ms ease, color 200ms ease, background-color 200ms ease;
+}
+
+.btn-ghost:hover {
+  border-color: rgb(212 175 55 / 0.55);
+  color: #f3d988;
+  background-color: rgb(255 255 255 / 0.03);
+}
+
+.glass-panel {
+  background: linear-gradient(160deg, rgb(16 20 28 / 0.9), rgb(8 10 14 / 0.94));
+  border: 1px solid rgb(255 255 255 / 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.brand-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(212 175 55 / 0.24) 20%,
+    rgb(212 175 55 / 0.5) 50%,
+    rgb(212 175 55 / 0.24) 80%,
+    transparent 100%
+  );
+}
+
+.elevated-card {
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: linear-gradient(180deg, rgb(14 18 26 / 0.9), rgb(8 10 14 / 0.98));
+  transition: border-color 220ms ease, transform 220ms ease, box-shadow 220ms ease;
+}
+
+.elevated-card:hover {
+  border-color: rgb(212 175 55 / 0.35);
+  transform: translateY(-3px);
+  box-shadow: 0 18px 30px rgb(0 0 0 / 0.35);
+}
+
+.animate-fade-in {
+  animation: fadeIn 360ms ease-out both;
+}
+
+.animate-slide-up {
+  animation: slideUp 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0d13;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgb(212 175 55 / 0.35);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(212 175 55 / 0.55);
+}

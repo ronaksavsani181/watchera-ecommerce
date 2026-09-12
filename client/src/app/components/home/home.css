@@ -1,0 +1,49 @@
+:host {
+  display: block;
+}
+
+/* Ensure smooth scrolling behavior on the whole page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar for a premium look */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #d4af37; /* Luxury Gold */
+}
+
+/* =========================================
+   INFINITE MARQUEE ANIMATION FOR BRANDS 
+   ========================================= */
+
+.marquee-track {
+  display: flex;
+  width: fit-content;
+  /* 35s speed gives a luxurious, slow, readable pan */
+  animation: scrollMarquee 35s linear infinite;
+}
+
+/* Pauses the slider when the user places their mouse anywhere over the section */
+.group:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes scrollMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* Translates exactly half of the width to loop seamlessly because the array is duplicated */
+    transform: translateX(-50%);
+  }
+}
